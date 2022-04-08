@@ -14,6 +14,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
+
+Route::post('/auth/register', 'AuthController@register');
+
+Route::post('/auth/login', 'AuthController@login');
+
+Route::resource('category','CategoryController');
+
+
+Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::get('/me', function(Request $request) {
+        return auth()->user();
+    });
+    Route::resource('transcation','TranscationController');
+
+    Route::post('/auth/logout', 'AuthController@logout');
 });
