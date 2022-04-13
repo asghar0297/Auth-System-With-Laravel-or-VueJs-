@@ -31,7 +31,7 @@ export default{
          ...mapActions(["login"]),
         submit(){
             this.$store.dispatch('login',this.form)
-            .then(() => this.$router.push('/register'))
+            .then(() => this.$router.push('/category'))
             .catch(err => console.log(err))
 
         }

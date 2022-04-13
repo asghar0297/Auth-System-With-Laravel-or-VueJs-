@@ -20,7 +20,7 @@ export default new Vuex.Store({
             state.status = 'success'
             state.token = token
         },
-        set_user(user){
+        set_user(state,user){
             state.user = user
         },
         handle_error(state,error){
@@ -45,7 +45,6 @@ export default new Vuex.Store({
                 .then(response => response.json())
                 .then(data => {
                     console.log(JSON.stringify(data.data.user));
-                    // return false;
                     const token = 'Bearer '+ data.data.token
                     const user = data.data.user
                     localStorage.setItem('token',token)
@@ -59,6 +58,41 @@ export default new Vuex.Store({
                     reject(error)
                 })
             })
-        }
+        },
+        logout({commit}){
+            return new Promise((resolve,reject)=>{
+                
+                commit('logout')
+                localStorage.removeItem('token')
+                resolve()
+
+            })
+
+
+        },
+        register({commit},user){
+            alert('fire');
+            return new Promise((resolve,reject) => {
+                commit('auth_request')
+                fetch(base_url+'auth/register',{
+                    method:'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(user)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    resolve(data)
+                })
+            })
+        },
+    },
+    getters:{
+        isLoggedIn : state => !!state.token,
+        authStatus : state => state.status,
+        getUser : state => state.user,
+        getError : state => state.error,
+
     }
 })

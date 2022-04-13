@@ -9,6 +9,7 @@
                         <router-link exact-active-class="active" to="/login" class="nav-item nav-link">Login</router-link>
                         <router-link exact-active-class="active" to="/register" class="nav-item nav-link">Register</router-link>
                         <router-link exact-active-class="active" to="/category" class="nav-item nav-link">Category</router-link>
+                        <a class="nav-item nav-link" @click="logout()" >logout</a>
                     </div>
                 </div>
             </div>
@@ -20,7 +21,24 @@
 </template>
 
 <script>
-    export default {}
+    export default {
+        data(){
+            return{
+                user:''
+            }
+        },
+        computed:{
+            isLoggedIn(){
+                return this.$store.getters.isLoggedIn
+            }
+        },
+        methods:{
+            logout(){
+                this.$store.dispatch('logout')
+                this.$router.push('/login')
+            }
+        }
+    }
 </script>
 
 
