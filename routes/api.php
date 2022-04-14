@@ -22,10 +22,10 @@ Route::post('/auth/register', 'AuthController@register');
 
 Route::post('/auth/login', 'AuthController@login');
 
-Route::resource('category','CategoryController');
 
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
+    Route::resource('category','CategoryController');
     Route::get('/me', function(Request $request) {
         return auth()->user();
     });

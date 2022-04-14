@@ -7,6 +7,8 @@ import App from './layouts/app'
 import store from './store'
 
 window.Vue = require('vue').default;
+axios.defaults.withCredentials = true
+axios.defaults.baseURL= 'http://larticles.net/api'
 
 
 // Vue.component('example-component', require('./components/ExampleComponent.vue').default);

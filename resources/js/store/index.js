@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
+import Vueaxios from 'vue-axios'
+
+
 
 Vue.use(Vuex)
 
@@ -35,23 +39,25 @@ export default new Vuex.Store({
         login({commit},user){
             return new Promise((resolve,reject) => {
                 commit('auth_request')
-                fetch(base_url+'auth/login',{
-                    method:'POST',
+                axios({
+                    url :'auth/login',
+                    method:'post',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(user)
+                    data: JSON.stringify(user)
                 })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(JSON.stringify(data.data.user));
-                    const token = 'Bearer '+ data.data.token
-                    const user = data.data.user
+                .then(response => {
+
+
+                    const token = 'Bearer '+ response.data.result.token
+                    const user = response.data.result.user
                     localStorage.setItem('token',token)
+                    axios.defaults.headers.common['Authorization'] = token
                     commit('auth_success',token)
                     commit('set_user',user)
                     commit('handle_error','')
-                    resolve(data)
+                    resolve(response)
                 })
                 .catch(error =>{
                     localStorage.removeItem('token')
@@ -61,10 +67,18 @@ export default new Vuex.Store({
         },
         logout({commit}){
             return new Promise((resolve,reject)=>{
-                
-                commit('logout')
-                localStorage.removeItem('token')
-                resolve()
+                axios({
+                    url:'/auth/logout',
+                    method:'POST'
+                }).then(res => {
+
+                    commit('logout')
+                    localStorage.removeItem('token')
+                    delete axios.defaults.headers.common['Authorization']
+                    resolve()
+                }).catch( err =>{
+                    reject(err);
+                })
 
             })
 

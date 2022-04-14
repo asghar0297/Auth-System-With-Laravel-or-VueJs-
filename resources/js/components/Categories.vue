@@ -52,12 +52,16 @@
         methods:{
             fetchCategories(url){
                 let vm = this;
-                url = url || '/api/category'
-                fetch(url)
-                .then( res => res.json())
+                url = url || '/category'
+                axios({
+                    url:url,
+                    method:'get'
+                })
                 .then(res => {
-                    this.categories = res.data.data;
-                    vm.makePagination(res.data);
+                    // console.log(JSON.stringify(res));
+                    // return false;
+                    this.categories = res.result.data;
+                    vm.makePagination(res.result);
 
 
                 })
